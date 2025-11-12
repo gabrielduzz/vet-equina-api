@@ -22,7 +22,6 @@ public class Horse {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    // dono (tutor) — referencia sua tabela users
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
@@ -52,14 +51,14 @@ public class Horse {
     private Instant updatedAt;
 
     @PrePersist
-    void prePersist() {
+    public void prePersist() {
         Instant now = Instant.now();
         createdAt = now;
         updatedAt = now;
     }
 
     @PreUpdate
-    void preUpdate() {
+    public void preUpdate() {
         updatedAt = Instant.now();
     }
 }

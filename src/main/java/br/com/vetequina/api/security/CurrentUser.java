@@ -13,6 +13,6 @@ public class CurrentUser {
         if (auth == null || auth.getName() == null) {
             throw new IllegalStateException("Usuário não autenticado");
         }
-        return UUID.fromString(auth.getName()); // name = sub (UUID do Supabase)
+        return UUID.fromString(auth.getName());
     }
 }

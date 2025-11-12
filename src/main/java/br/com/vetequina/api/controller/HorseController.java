@@ -43,7 +43,6 @@ public class HorseController {
     @PutMapping("/{horseId}")
     public ResponseEntity<HorseResponse> update(@PathVariable UUID horseId,
             @Valid @RequestBody HorseUpdateRequest body) {
-        // service já carrega e valida posse
         Horse entity = service.getMyHorse(horseId, currentUser.id());
         mapper.update(entity, body);
         Horse saved = service.updateMyHorse(horseId, entity, currentUser.id());

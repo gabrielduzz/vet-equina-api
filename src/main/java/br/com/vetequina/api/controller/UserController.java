@@ -19,7 +19,6 @@ public class UserController {
     private final UserService userService;
     private final CurrentUser currentUser;
 
-    // ---------- Self-service ----------
     @GetMapping("/me")
     public ResponseEntity<User> me() {
         UUID uid = currentUser.id();
@@ -40,16 +39,13 @@ public class UserController {
     // return ResponseEntity.ok(service.searchByName(q));
     // }
 
-    // opcional: endpoint para garantir que existe "profile" local após login
     @PostMapping("/users/sync")
     public ResponseEntity<User> syncFromAuth(@RequestBody SyncFromAuthRequest body) {
-        // admin/worker job ou hook do front após login; id/email devem vir do token
-        // verificado
+
         return ResponseEntity
                 .ok(userService.upsertFromAuth(body.userId(), body.email(), body.firstName(), body.lastName()));
     }
 
-    // DTOs enxutos (records)
     public record UpdateProfileRequest(String firstName, String lastName) {
     }
 

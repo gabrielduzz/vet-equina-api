@@ -3,6 +3,7 @@ package br.com.vetequina.api.security;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Component
+@Profile("!test") // Não ativa em testes
 @RequiredArgsConstructor
 public class ProfileSyncFilter extends OncePerRequestFilter {
 
@@ -25,7 +27,6 @@ public class ProfileSyncFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String p = request.getRequestURI();
-        // pule sync em rotas públicas/health/doc
         return p.startsWith("/actuator")
                 || p.startsWith("/swagger-ui")
                 || p.startsWith("/v3/api-docs");
@@ -48,7 +49,6 @@ public class ProfileSyncFilter extends OncePerRequestFilter {
                     UUID userId = UUID.fromString(sub);
                     String email = jwt.getClaimAsString("email");
 
-                    // tentar nomes de user_metadata (se existirem)
                     String firstName = null, lastName = null;
                     Object metaObj = jwt.getClaim("user_metadata");
                     if (metaObj instanceof Map<?, ?> meta) {
@@ -58,13 +58,11 @@ public class ProfileSyncFilter extends OncePerRequestFilter {
                             firstName = s;
                         if (ln instanceof String s)
                             lastName = s;
-                        // Se tiver "name" único, você pode dividir em first/last aqui.
                     }
 
                     userService.upsertFromAuth(userId, email, firstName, lastName);
                 } catch (Exception e) {
-                    // Não quebre a request por falha de sync; logue se quiser
-                    // e siga o fluxo (ou troque por 500, sua decisão de produto)
+
                 }
             }
         }

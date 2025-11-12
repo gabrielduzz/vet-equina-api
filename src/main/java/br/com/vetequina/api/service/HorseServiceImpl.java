@@ -23,7 +23,7 @@ public class HorseServiceImpl implements HorseService {
     public Horse createForCurrentUser(Horse toCreate, UUID currentUserId) {
         User owner = users.findById(currentUserId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-        toCreate.setId(null); // garantir novo
+        toCreate.setId(null);
         toCreate.setOwner(owner);
         return horses.save(toCreate);
     }

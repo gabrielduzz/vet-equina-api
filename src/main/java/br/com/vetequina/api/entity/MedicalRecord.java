@@ -22,7 +22,6 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    // FK para horse (e, por consequência, para o owner do cavalo)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "horse_id", nullable = false)
     private Horse horse;
@@ -36,7 +35,6 @@ public class MedicalRecord {
     @Column(name = "description", nullable = false, length = 4000)
     private String description;
 
-    // URL (ou path) no Supabase Storage
     @Size(max = 2048)
     @Column(name = "file_url", length = 2048)
     private String fileUrl;

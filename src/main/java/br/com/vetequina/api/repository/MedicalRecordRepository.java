@@ -11,6 +11,5 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, UU
 
     Page<MedicalRecord> findByHorseId(UUID horseId, Pageable pageable);
 
-    // para checar posse: combinar com exists de Horse no service
     Optional<MedicalRecord> findByIdAndHorseId(UUID recordId, UUID horseId);
 }
